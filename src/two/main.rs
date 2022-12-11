@@ -1,24 +1,25 @@
 mod rock_paper;
 mod game;
 
+use advent::read_stdin;
 use rock_paper::RockPaper;
 
 fn main() {
-    let stdin_by_line: Vec<&str>;
-
-    let mut pipe_content = String::new();
-    let mut lines = std::io::stdin().lines();
-
-    while let Some(v) = lines.next() {
-        let str = v.unwrap();
-
-        pipe_content.push_str(&str);
-        pipe_content.push_str("\n");
-    }
-    pipe_content = pipe_content.trim().to_string();
-    stdin_by_line = pipe_content.split("\n").collect();
+    let stdin = read_stdin();
+    let stdin_by_line: Vec<&str> = stdin.iter().map(|v| v.as_str()).collect();
 
     let mut game = RockPaper::default();
+
+    // let rigged = match std::env::args().nth(1) {
+    //     Some(v) if v == "rigged" => true,
+    //     Some(_) | None => false
+    // };
+
+    let rigged = if let Some(v) = std::env::args().nth(1) {
+        true
+    } else {
+        false
+    };
 
     for line in stdin_by_line {
         let pair: Vec<&str> = line.split_whitespace().collect();
@@ -31,7 +32,11 @@ fn main() {
             theirs
         );
 
-        game.play();
+        if rigged {
+            game.play_rigged();
+        } else {
+            game.play();
+        }
     }
 
     println!("{}", game.game_score);

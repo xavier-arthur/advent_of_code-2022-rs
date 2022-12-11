@@ -6,11 +6,13 @@ use std::default::Default;
 #[derive(Debug)]
 pub struct RockPaper {
     pub game_score: u32,
+    pub game_result: Option<GameResult>,
     mine: Option<GameInput>,
-    theirs: Option<GameInput>,
-    game_result: Option<GameResult>
+    theirs: Option<GameInput>
+    
 }
 
+#[allow(dead_code)]
 impl RockPaper {
     const POINTS_ROCK    : u8 = 1;
     const POINTS_PAPER   : u8 = 2;
@@ -25,9 +27,20 @@ impl RockPaper {
         self.game_result = None;
     }
 
+    fn are_inputs_equivalent(&mut self) -> bool {
+        if self.mine == Some(GameInput::X) && self.theirs == Some(GameInput::A) {
+            return true;
+        } else if self.mine == Some(GameInput::Y) && self.theirs == Some(GameInput::B) {
+            return true;
+        } else if self.mine == Some(GameInput::Z) && self.theirs == Some(GameInput::C) {
+            return true;
+        }
+        false
+    }
+
     pub fn play(&mut self) {
         let mut points_to_sum: u32 = 0;
-        let equivalent = self.are_inputs_equivalent();
+        let equivalent   = self.are_inputs_equivalent();
         let mine   = self.mine.as_ref().unwrap();
         let theirs = self.theirs.as_ref().unwrap();
 
@@ -56,6 +69,23 @@ impl RockPaper {
         self.game_score += points_to_sum;
     }
 
+    pub fn play_rigged(&mut self) {
+        let result_target: GameResult = match &self.mine {
+            Some(v) if *v == GameInput::Y => GameResult::DRAW,
+            Some(v) if *v == GameInput::X => GameResult::LOSE,
+            Some(v) if *v == GameInput::Z => GameResult::WIN,
+            Some(_) | None => panic!("couldn't parse target result"),
+        };
+
+        if result_target == GameResult::DRAW {
+            self.draw();
+        } else if result_target == GameResult::WIN {
+            self.win();
+        }  else {
+            self.lose();
+        }
+    }
+
     fn parse_input(s: &str) -> Result<GameInput, ()> {
         match s {
             "A" => Ok(GameInput::A),
@@ -70,16 +100,38 @@ impl RockPaper {
         }
     }
 
-    fn are_inputs_equivalent(&mut self) -> bool {
-        if self.mine == Some(GameInput::X) && self.theirs == Some(GameInput::A) {
-            return true;
-        } else if self.mine == Some(GameInput::Y) && self.theirs == Some(GameInput::B) {
-            return true;
-        } else if self.mine == Some(GameInput::Z) && self.theirs == Some(GameInput::C) {
-            return true;
-        }
-        false
+    fn win(&mut self) {
+        self.game_result = Some(GameResult::WIN);
+        self.game_score += Self::SCORE_WIN as u32;
+        self.game_score += match &self.theirs {
+            Some(v) if *v == GameInput::A => Self::POINTS_PAPER as u32,
+            Some(v) if *v == GameInput::B => Self::POINTS_SCISSORS as u32,
+            Some(v) if *v == GameInput::C => Self::POINTS_ROCK as u32,
+            Some(_) | None => panic!("couldn't parse")
+        };
     }
+
+    fn draw(&mut self) {
+        self.game_result = Some(GameResult::DRAW);
+        self.game_score += Self::SCORE_DRAW as u32;
+        self.game_score += match &self.theirs {
+            Some(v) if *v == GameInput::A => Self::POINTS_ROCK as u32,
+            Some(v) if *v == GameInput::B => Self::POINTS_PAPER as u32,
+            Some(v) if *v == GameInput::C => Self::POINTS_SCISSORS as u32,
+            Some(_) | None => panic!("couldn't parse")
+        };
+    }
+
+    fn lose(&mut self) {
+        self.game_result = Some(GameResult::LOSE);
+        self.game_score += match &self.theirs {
+            Some(v) if *v == GameInput::A => Self::POINTS_SCISSORS as u32,
+            Some(v) if *v == GameInput::B => Self::POINTS_ROCK as u32,
+            Some(v) if *v == GameInput::C => Self::POINTS_PAPER as u32,
+            Some(_) | None => panic!("couldn't parse")
+        };
+    }
+
 }
 
 impl Default for RockPaper {

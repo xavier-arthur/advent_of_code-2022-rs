@@ -8,7 +8,7 @@ pub enum GameInput {
     Z
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum GameResult {
     WIN,
     LOSE,
