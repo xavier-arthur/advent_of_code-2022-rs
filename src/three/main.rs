@@ -1,23 +1,12 @@
+use advent::read_stdin;
 use util::{get_duplicates};
 
 mod util;
 
 fn main() {
-    let stdin_by_line: Vec<&str>;
-    let mut stdin = std::io::stdin().lines();
-    let mut piped_content = String::new();
+    let stdin = read_stdin();
+    let stdin_by_line: Vec<&str> = stdin.iter().map(|v| v.as_str()).collect();
 
-    while let Some(line) = stdin.next() {
-        let str = line.unwrap();
-        piped_content.push_str(&str);
-        piped_content.push_str("\n");
-    }
-
-    piped_content = piped_content.trim().to_string();
-    stdin_by_line = piped_content.split("\n").collect();
-
-    stdin_by_line.len();
-    
     let mut stdin_by_char: Vec<Vec<char>> = Vec::new();
 
     for line in stdin_by_line {
