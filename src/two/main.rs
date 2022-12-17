@@ -10,15 +10,9 @@ fn main() {
 
     let mut game = RockPaper::default();
 
-    // let rigged = match std::env::args().nth(1) {
-    //     Some(v) if v == "rigged" => true,
-    //     Some(_) | None => false
-    // };
-
-    let rigged = if let Some(v) = std::env::args().nth(1) {
-        true
-    } else {
-        false
+    let rigged = match std::env::args().nth(1) {
+        Some(v) if v == "rigged" => true,
+        _ => false
     };
 
     for line in stdin_by_line {

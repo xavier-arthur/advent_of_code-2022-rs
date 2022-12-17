@@ -17,6 +17,10 @@ impl Score {
         
         Self { range: score_chars }
     }
+
+    pub fn get_points(&self, ch: char) -> i32 {
+        get_index_of(&ch, &self.range).unwrap() as i32 + 1
+    }
 }
 
 fn contains(needle: &char, haysack: &[char]) -> bool {
