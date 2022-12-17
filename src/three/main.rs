@@ -32,6 +32,12 @@ fn process_badge(mut input: Vec<&str>) -> i32 {
         groups.push(three);
     }
 
+    /*
+        loop through all groups and for each letter in the first row test if
+        it's present on the second and third row, if so, sum its score to the total
+        and continue the the next group
+    */
+
     'outer:
     for group in groups {
         for char in group[0].chars() {
