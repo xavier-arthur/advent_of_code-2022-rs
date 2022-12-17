@@ -7,12 +7,12 @@ impl Score {
     pub fn new() -> Self {
         let mut score_chars: [char; 52] = [0 as char; 52];
 
-        for val in 0..26 {
-            score_chars[val] = ((val + 65) as u8 as char).to_ascii_lowercase();
+        for (i, val) in ('a'..='z').enumerate() {
+            score_chars[i] = val;
         }
 
-        for val in 26..52 {
-            score_chars[val] = (val + 39) as u8 as char;
+        for (i, val) in ('A'..='Z').enumerate() {
+            score_chars[i + 26] = val;
         }
         
         Self { range: score_chars }
