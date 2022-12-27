@@ -20,6 +20,10 @@ path = "src/three/main.rs"
 name = "four"
 path = "src/four/main.rs"
 
+[[bin]]
+name = "five"
+path = "src/five/main.rs"
+
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
