@@ -24,6 +24,18 @@ path = "src/four/main.rs"
 name = "five"
 path = "src/five/main.rs"
 
+[[bin]]
+name = "six"
+path = "src/six/main.rs"
+
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[profile.size]
+inherits = "release"
+opt-level = 'z'     # Optimize for size
+lto = true          # Enable link-time optimization
+codegen-units = 1   # Reduce number of codegen units to increase optimizations
+panic = 'abort'     # Abort on panic
+strip = true        # Strip symbols from binary
 
 [dependencies]

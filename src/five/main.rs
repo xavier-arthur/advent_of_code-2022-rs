@@ -20,7 +20,7 @@ fn parse_crates(crates: Vec<String>) -> Vec<Vec<char>> {
     for line in crates {
         for (i, v) in line.chars()
             .collect::<Vec<char>>()
-            .chunks(4) 
+            .chunks(4)
             .into_iter()
             .enumerate() {
 
@@ -39,13 +39,13 @@ fn parse_directives(directives: Vec<String>) -> Vec<Directive> {
     for v in directives {
         let dir_by_word: Vec<&str> = v.split(" ").collect();
 
-        let target= dir_by_word[1].parse::<u32>().unwrap();
-        let from  = dir_by_word[3].parse::<usize>().unwrap() - 1;
-        let to    = dir_by_word[5].parse::<usize>().unwrap() - 1;
+        let target = dir_by_word[1].parse::<u32>().unwrap();
+        let from   = dir_by_word[3].parse::<usize>().unwrap() - 1;
+        let to     = dir_by_word[5].parse::<usize>().unwrap() - 1;
 
         dir.push(Directive::new(from, to, target));
     }
-    
+
     dir
 }
 
@@ -67,7 +67,7 @@ fn process_directive(stacks: &mut Vec<Vec<char>>, dir: Directive) {
 fn main() {
     let input  = read_stdin();
     let crates = input[0..8].to_vec();
-    let directives = input[10..].to_vec(); 
+    let directives = input[10..].to_vec();
     drop(input);
 
     let mut stacks = parse_crates(crates);
@@ -80,5 +80,6 @@ fn main() {
     for ch in stacks {
         print!("{}", ch[0]);
     }
+
     println!("");
 }
